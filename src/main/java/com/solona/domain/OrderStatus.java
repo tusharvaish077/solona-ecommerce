@@ -1,8 +1,8 @@
-package com.solona.modal;
+package com.solona.domain;
 
 public enum OrderStatus {
     PENDING,
-    PLACED,
+    PLACE,
     CONFIRMED,
     SHIPPED,
     DELIVERED,

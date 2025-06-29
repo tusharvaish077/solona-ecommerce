@@ -33,6 +33,7 @@ public class CustomUserService implements UserDetailsService {
             Seller seller = sellerRepository.findByEmail(actualUsername);
 
             if(seller!=null){
+                System.out.println("Inside from the customuserservice " +seller.getRole());
                 return buildUserDetails(seller.getEmail(), seller.getPassword(),seller.getRole());
             }
         }
@@ -50,7 +51,8 @@ public class CustomUserService implements UserDetailsService {
             role =  USER_ROLE.ROLE_CUSTOMER;
         }
         List<GrantedAuthority> authorityList = new ArrayList<>();
-        authorityList.add(new SimpleGrantedAuthority("ROLE_"+role));
+        //authorityList.add(new SimpleGrantedAuthority("ROLE_"+role)); // this line causing error commenting role edition
+        authorityList.add(new SimpleGrantedAuthority(role.toString()));
         return new org.springframework.security.core.userdetails
                 .User(email,
                 password,

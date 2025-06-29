@@ -2,6 +2,8 @@ package com.solona.Controller;
 
 import com.solona.domain.USER_ROLE;
 import com.solona.modal.VerificationCode;
+import com.solona.request.LoginOtpRequest;
+import com.solona.request.LoginRequest;
 import com.solona.response.ApiResponse;
 import com.solona.response.AuthResponse;
 import com.solona.response.SignupRequest;
@@ -26,11 +28,7 @@ public class AuthController {
     private final AuthService authService;
     @PostMapping("/signup")
     public ResponseEntity<AuthResponse>createUserHandler(@RequestBody SignupRequest req) throws Exception {
-//        User user = new User();
-//        user.setEmail(req.getEmail());
-//        user.setFullName(req.getFullName());
-//
-//        User savedUser = userRepository.save(user);
+
         String jwt = authService.createUser(req);
         AuthResponse res = new AuthResponse();
         res.setJwt(jwt);
@@ -40,11 +38,19 @@ public class AuthController {
     }
 
     @PostMapping("/sent/login-signup-otp")
-    public ResponseEntity<ApiResponse>createUserHandler(@RequestBody VerificationCode req) throws Exception {
+    public ResponseEntity<ApiResponse>createUserHandler(@RequestBody LoginOtpRequest req) throws Exception {
 
-        authService.sentLoginOtp(req.getEmail());
+        authService.sentLoginOtp(req.getEmail(), req.getRole());
         ApiResponse res = new ApiResponse();
         res.setMessage("Otp sent successfully");
         return ResponseEntity.ok(res);
+    }
+
+    @PostMapping("/signing")
+    public ResponseEntity<AuthResponse> loginHandler(
+            @RequestBody LoginRequest req
+            ) throws Exception{
+        AuthResponse authResponse = authService.signing(req);
+        return ResponseEntity.ok(authResponse);
     }
 }

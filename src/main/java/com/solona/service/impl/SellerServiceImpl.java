@@ -2,6 +2,7 @@ package com.solona.service.impl;
 
 import com.solona.config.JwtProvider;
 import com.solona.domain.AccountStatus;
+import com.solona.exception.SellerException;
 import com.solona.modal.Address;
 import com.solona.modal.Seller;
 import com.solona.repository.AddressRepository;
@@ -25,7 +26,7 @@ public class SellerServiceImpl implements SellerService {
     @Override
     public Seller getSellerProfile(String jwt) throws Exception {
         String email = jwtProvider.getEmailfromJwtToken(jwt);
-
+        //System.out.println(email);
         return this.getSellerByEmail(email);
     }
 
@@ -51,9 +52,10 @@ public class SellerServiceImpl implements SellerService {
     }
 
     @Override
-    public Seller getSellerById(Long id) throws Exception {
+    public Seller getSellerById(Long id) throws SellerException {
 
-        return sellerRepository.findById(id).orElseThrow(() -> new Exception("Seller not found with Id - " +id));
+        return sellerRepository.findById(id)
+                .orElseThrow(() -> new SellerException("Seller not found with Id - " +id));
     }
 
     @Override

@@ -21,7 +21,7 @@ public class Category {
 
     @NotNull
     @Column(unique = true)
-    private String Categoryid;
+    private String categoryId; // this is changed from CategoryId to categoryId after facing issue on restart
 
     @ManyToOne
     private Category perentCategory;

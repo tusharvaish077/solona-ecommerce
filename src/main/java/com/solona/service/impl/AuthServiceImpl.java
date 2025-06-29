@@ -1,6 +1,8 @@
 package com.solona.service.impl;
 
+import com.solona.modal.Seller;
 import com.solona.modal.VerificationCode;
+import com.solona.repository.SellerRepository;
 import com.solona.repository.VerificationCodeRepository;
 import com.solona.request.LoginRequest;
 import com.solona.response.AuthResponse;
@@ -37,6 +39,8 @@ public class AuthServiceImpl implements AuthService {
 
     private final UserRepository userRepository;
 
+    private final SellerRepository sellerRepository;
+
     private final PasswordEncoder passwordEncoder;
 
     private final CartRepository cartRepository;
@@ -50,16 +54,23 @@ public class AuthServiceImpl implements AuthService {
     private final CustomUserService customUserService;
 
     @Override
-    public void sentLoginOtp(String email) throws Exception {
-        String SIGNING_PREFIX ="signin_";
+    public void sentLoginOtp(String email, USER_ROLE role) throws Exception {
+        String SIGNING_PREFIX = "signing_";
+      //  String SELLER_PREFIX = "seller_";
 
         if(email.startsWith(SIGNING_PREFIX)){
             email = email.substring(SIGNING_PREFIX.length());
-
-            User user = userRepository.findByEmail(email);
-            if(user == null ){
-                throw new Exception("User not exist with provided email !!");
-
+            if(role.equals(USER_ROLE.ROLE_SELLER)) {
+                Seller seller = sellerRepository.findByEmail(email);
+                if(seller == null){
+                    throw new Exception("seller not found");
+                }
+            }
+            else{
+                User user = userRepository.findByEmail(email);
+                if(user == null ){
+                    throw new Exception("User not exist with provided email !!");
+                }
             }
         }
         VerificationCode isExist = verificationCodeRepository.findByEmail(email);
@@ -114,10 +125,10 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public AuthResponse signing(LoginRequest req) {
+    public AuthResponse signing(LoginRequest req) throws Exception {
         String username =req.getEmail();
         String otp = req.getOtp();
-
+        //System.out.println(req);
         Authentication authentication = authenticate(username, otp);
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String token = jwtProvider.generateToken(authentication);
@@ -127,20 +138,26 @@ public class AuthServiceImpl implements AuthService {
 
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
         String rolename = authorities.isEmpty()?null:authorities.iterator().next().getAuthority();
-
+        System.out.println("role from the debug" +rolename);
         authResponse.setRole(USER_ROLE.valueOf(rolename));
 
         return authResponse;
     }
 
-    private Authentication authenticate(String username, String otp){
+    private Authentication authenticate(String username, String otp) throws Exception {
         UserDetails userDetails = customUserService.loadUserByUsername(username);
+        String SELLER_PREFIX ="seller_";
+
+        if(username.startsWith(SELLER_PREFIX)){
+            username = username.substring(SELLER_PREFIX.length());
+        }
         if(userDetails == null){
             throw new BadCredentialsException("invalid username");
         }
+
         VerificationCode verificationCode = verificationCodeRepository.findByEmail(username);
         if(verificationCode == null ||! verificationCode.getOtp().equals(otp)){
-            throw new BadCredentialsException("wrong otp");
+            throw new Exception("wrong otp");
 
         }
         return new UsernamePasswordAuthenticationToken(

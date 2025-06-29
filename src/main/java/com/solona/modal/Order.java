@@ -1,5 +1,6 @@
 package com.solona.modal;
 
+import com.solona.domain.OrderStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -19,6 +20,9 @@ public class Order {
     private Long id;
 
     private String orderId;
+
+    @ManyToOne
+    private User user;
 
     private Long sellerId;
 

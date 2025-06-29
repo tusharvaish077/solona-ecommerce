@@ -35,7 +35,7 @@ public class Product {
     private String color;
 
     @ElementCollection
-    private List<String> image = new ArrayList<>();
+    private List<String> images = new ArrayList<>();
 
     private int numRatings;
 
