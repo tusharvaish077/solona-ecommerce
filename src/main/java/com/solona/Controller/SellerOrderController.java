@@ -37,7 +37,8 @@ public class SellerOrderController {
             @PathVariable OrderStatus orderStatus
 
             ) throws Exception{
-//        Order order = orderService.updateOrderStatus()
-        return null;
+          Order order = orderService.updateOrderStatus(orderId,orderStatus);
+
+        return new ResponseEntity<>(order, HttpStatus.ACCEPTED);
     }
 }
