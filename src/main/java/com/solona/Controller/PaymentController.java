@@ -3,10 +3,7 @@ package com.solona.Controller;
 import com.solona.modal.*;
 import com.solona.response.ApiResponse;
 import com.solona.response.PaymentLinkResponse;
-import com.solona.service.PaymentService;
-import com.solona.service.SellerReportService;
-import com.solona.service.SellerService;
-import com.solona.service.UserService;
+import com.solona.service.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +17,7 @@ public class PaymentController {
     private final UserService userService;
     private final SellerService sellerService;
     private final SellerReportService sellerReportService;
+    private final TransactionService transactionService;
 
     @GetMapping("/{paymentId}")
     public ResponseEntity<ApiResponse> paymentSuccessHandler(
@@ -38,7 +36,8 @@ public class PaymentController {
                 paymentLinkId);
         if(paymentSuccess){
             for(Order order:paymentOrder.getOrders()){
-//                transactionService.createTransaction(order);
+
+                transactionService.createTransaction(order);
                 Seller seller = sellerService.getSellerById(order.getSellerId());
                 SellerReport report = sellerReportService.getSellerReport(seller);
                 report.setTotalOrders(report.getTotalOrders()+1);
