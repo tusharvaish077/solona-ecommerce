@@ -15,12 +15,13 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 
 @Configuration
 @EnableWebSecurity
-public class AppConfig {
+public class  AppConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -43,8 +44,13 @@ public class AppConfig {
             @Override
             public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
                 CorsConfiguration cfg =new CorsConfiguration();
-                cfg.setAllowedOrigins(Collections.singletonList("*"));
-                cfg.setAllowedMethods(Collections.singletonList("*"));
+                                                    //changed from localhost:3000 to http://* for testing purpose
+                cfg.setAllowedOriginPatterns(Arrays.asList(
+                        "http://localhost:3000",
+                        "http://192.168.*:*"
+                ));
+                //cfg.setAllowedMethods(Collections.singletonList("*"));
+                cfg.setAllowedMethods(Arrays.asList("GET","POST","PUT","DELETE","OPTIONS"));
                 cfg.setAllowedHeaders(Collections.singletonList("*"));
                 cfg.setAllowCredentials(true);
                 cfg.setExposedHeaders(Collections.singletonList("Authorization"));

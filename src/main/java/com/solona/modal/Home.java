@@ -11,6 +11,8 @@ public class Home {
 
     private List<HomeCategory> electrricCategories;
 
+    private List<HomeCategory> adBanner;
+
     private List<HomeCategory> dealCategories;
 
     private List<Deal> deals;

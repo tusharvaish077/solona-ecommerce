@@ -2,7 +2,7 @@ package com.solona.domain;
 
 public enum OrderStatus {
     PENDING,
-    PLACE,
+    PLACED,
     CONFIRMED,
     SHIPPED,
     DELIVERED,

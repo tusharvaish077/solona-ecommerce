@@ -29,7 +29,7 @@ public class User {
 
     private String mobile;
 
-    private USER_ROLE role = USER_ROLE.ROLE_CUSTOMER;
+    private USER_ROLE role ;
 
     @OneToMany
     private Set<Address> address = new HashSet<>();

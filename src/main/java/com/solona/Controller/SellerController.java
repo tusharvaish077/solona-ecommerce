@@ -65,8 +65,9 @@ public ResponseEntity<Seller> verifySellerEmail(
 }
     @PostMapping
     public ResponseEntity<Seller> createSeller(@RequestBody Seller seller) throws Exception, MessagingException{
+        System.out.println(seller.getEmail());
         Seller savedSeller = sellerService.createSeller(seller);
-
+        String prefix = "seller_";
         String otp = OtpUtil.generateOtp();
 
         VerificationCode verificationCode = new VerificationCode();

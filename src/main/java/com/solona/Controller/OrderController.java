@@ -16,7 +16,7 @@ import java.util.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/orders")
+@RequestMapping("/orders")
 public class OrderController {
     private final OrderService orderService;
     private final UserService userService;
@@ -30,7 +30,7 @@ public class OrderController {
     public ResponseEntity<PaymentLinkResponse> createOrderHandler(
             @RequestBody Address shippingAddress,
             @RequestParam PaymentMethod paymentMethod,
-            @RequestHeader("Authoriation") String jwt
+            @RequestHeader("Authorization") String jwt
             ) throws Exception{
         User user = userService.findUserByJwtToken(jwt);
         Cart cart = cartService.findUserCart(user);

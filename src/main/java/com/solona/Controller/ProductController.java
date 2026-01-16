@@ -16,7 +16,7 @@ import java.util.List;
 public class ProductController {
     private final ProductService productService;
 
-    @GetMapping("/{productId}")
+    @GetMapping("/{ProductId}")
     public ResponseEntity<Product> getProductById(@PathVariable Long ProductId) throws ProductException {
         Product product = productService.findProductById(ProductId);
         return new ResponseEntity<>(product, HttpStatus.OK);

@@ -17,6 +17,7 @@ import com.stripe.exception.StripeException;
 import com.stripe.model.checkout.Session;
 import com.stripe.param.checkout.SessionCreateParams;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 
@@ -25,12 +26,18 @@ import java.util.Set;
 @Service
 @RequiredArgsConstructor
 public class PaymentServiceImpl implements PaymentService {
-    private PaymentOrderRepository paymentOrderRepository;
-    private OrderRepository orderRepository;
+    private final PaymentOrderRepository paymentOrderRepository;
+    private final OrderRepository orderRepository;
 
-    private String apiKey = "apiKey";
-    private String apiSecret = "apiSecret";
-    private String stripeSecretKey = "stripesecurity";
+
+    @Value("${stripe.api.key}")
+    private String stripeSecretKey;
+
+    @Value("${razorpay.api.key}")
+    private String apiKey;
+
+    @Value("${razorpay.api.secret}")
+    private String apiSecret;
 
     @Override
     public PaymentOrder createOrder(User user, Set<Order> orders) {
@@ -86,31 +93,50 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Override
     public PaymentLink createRazorpayPaymentLink(User user, Long amount, Long orderId) throws RazorpayException {
-        amount = amount*100;
-        try{
+        Long  Amount=  amount*100;
+
+
+        try {
+            // Instantiate a Razorpay client with your key ID and secret
             RazorpayClient razorpay = new RazorpayClient(apiKey, apiSecret);
+
             JSONObject paymentLinkRequest = new JSONObject();
+            paymentLinkRequest.put("amount",amount);
             paymentLinkRequest.put("currency","INR");
+
+            // Create a JSON object with the customer details
             JSONObject customer = new JSONObject();
             customer.put("name",user.getFullName());
-            customer.put("email", user.getEmail());
+
+            customer.put("email",user.getEmail());
             paymentLinkRequest.put("customer",customer);
 
+            // Create a JSON object with the notification settings
             JSONObject notify = new JSONObject();
-            notify.put("email", true);
+            notify.put("email",true);
             paymentLinkRequest.put("notify",notify);
-            paymentLinkRequest.put("callback_url","http://localhost:3000/payment-success/" +orderId);
 
+            // Set the reminder settings
+            paymentLinkRequest.put("reminder_enable",true);
+
+            // Set the callback URL and method
+            paymentLinkRequest.put("callback_url","http://localhost:3000/payment-success/"+orderId);
             paymentLinkRequest.put("callback_method","get");
 
-            PaymentLink paymentLink = razorpay.paymentLink.create(paymentLinkRequest);
+            PaymentLink payment = razorpay.paymentLink.create(paymentLinkRequest);
 
-            String paymentLinkUrl = paymentLink.get("short_url");
-            String paymentLinkId = paymentLink.get("id");
+            String paymentLinkUrl = payment.get("short_url");
+            String paymentLinkId = payment.get("id");
 
-            return paymentLink;
-        }catch (Exception e){
-            System.out.println(e.getMessage());
+
+
+            System.out.println("payment ----- "+payment);
+
+            return payment;
+
+        } catch (RazorpayException e) {
+
+            System.out.println("Error creating payment link: " + e.getMessage());
             throw new RazorpayException(e.getMessage());
         }
 

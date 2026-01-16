@@ -33,6 +33,9 @@ public class HomeServiceImpl implements HomeService {
         List<HomeCategory> dealCategories = allCategories.stream()
                 .filter(category-> category.getSection()== HomeCategorySection.DEALS)
                 .collect(Collectors.toList());
+        List<HomeCategory> adBanner = allCategories.stream()
+                .filter(category-> category.getSection()== HomeCategorySection.AD_BANNER)
+                .collect(Collectors.toList());
 
         List<Deal> createdDeals = new ArrayList<>();
 
@@ -50,6 +53,7 @@ public class HomeServiceImpl implements HomeService {
         home.setShopByCategories(shopByCategories);
         home.setElectrricCategories(electricCategories);
         home.setDeals(createdDeals);
+        home.setAdBanner(adBanner);
         home.setDealCategories(dealCategories);
         return home;
     }

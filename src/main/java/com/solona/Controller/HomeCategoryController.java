@@ -13,7 +13,6 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/home/categories")
 public class HomeCategoryController {
     private final HomeCategoryService homeCategoryService;
     private final HomeService homeService;

@@ -4,5 +4,6 @@ public enum HomeCategorySection {
     ELECTRIC_CATEGORY,
     GRID,
     SHOP_BY_CATEGORIES,
+    AD_BANNER,
     DEALS
 }

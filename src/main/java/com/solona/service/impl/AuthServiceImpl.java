@@ -1,5 +1,6 @@
 package com.solona.service.impl;
 
+import com.solona.exception.UserException;
 import com.solona.modal.Seller;
 import com.solona.modal.VerificationCode;
 import com.solona.repository.SellerRepository;
@@ -16,6 +17,7 @@ import com.solona.repository.UserRepository;
 import com.solona.service.AuthService;
 import com.solona.service.EmailService;
 import com.solona.utils.OtpUtil;
+import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.expression.spel.ast.NullLiteral;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -54,7 +56,7 @@ public class AuthServiceImpl implements AuthService {
     private final CustomUserService customUserService;
 
     @Override
-    public void sentLoginOtp(String email, USER_ROLE role) throws Exception {
+    public void sentLoginOtp(String email, USER_ROLE role) throws UserException, MessagingException {
         String SIGNING_PREFIX = "signing_";
       //  String SELLER_PREFIX = "seller_";
 
@@ -62,21 +64,20 @@ public class AuthServiceImpl implements AuthService {
             email = email.substring(SIGNING_PREFIX.length());
             if(role.equals(USER_ROLE.ROLE_SELLER)) {
                 Seller seller = sellerRepository.findByEmail(email);
-                if(seller == null){
-                    throw new Exception("seller not found");
-                }
+//                if(seller == null){
+//                    throw new Exception("seller not found");
+//                }
             }
             else{
                 User user = userRepository.findByEmail(email);
-                if(user == null ){
-                    throw new Exception("User not exist with provided email !!");
-                }
+//                if(user == null ){
+//                    throw new Exception("User not exist with provided email !!");
+//                }
             }
         }
         VerificationCode isExist = verificationCodeRepository.findByEmail(email);
         if(isExist != null){
             verificationCodeRepository.delete(isExist);
-
         }
         String otp = OtpUtil.generateOtp();
         VerificationCode verificationCode = new VerificationCode();

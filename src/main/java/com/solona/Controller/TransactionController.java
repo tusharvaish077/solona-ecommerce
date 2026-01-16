@@ -15,14 +15,14 @@ import java.util.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/transactions")
+@RequestMapping("/transactions")
 public class TransactionController {
     private final TransactionService transactionService;
     private final SellerService sellerService;
 
     @GetMapping("/seller")
     public ResponseEntity<List<Transaction>>getTransactionyBySeller(
-            @RequestHeader("Authentication") String jwt
+            @RequestHeader("Authorization") String jwt
     ) throws Exception {
         Seller seller = sellerService.getSellerProfile(jwt);
         List<Transaction> transactions = transactionService.getTransactionBySellerId(seller);
