@@ -47,7 +47,8 @@ public class  AppConfig {
                                                     //changed from localhost:3000 to http://* for testing purpose
                 cfg.setAllowedOriginPatterns(Arrays.asList(
                         "http://localhost:3000",
-                        "http://192.168.*:*"
+                        "http://192.168.*:*",
+                        "https://solonaecomfrontend-3s8ymvjus-tusharvaish077s-projects.vercel.app"
                 ));
                 //cfg.setAllowedMethods(Collections.singletonList("*"));
                 cfg.setAllowedMethods(Arrays.asList("GET","POST","PUT","DELETE","OPTIONS"));
