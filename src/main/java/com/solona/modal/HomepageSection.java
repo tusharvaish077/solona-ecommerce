@@ -1,15 +1,19 @@
 package com.solona.modal;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.solona.domain.SectionType;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 import org.json.JSONObject;
 
 import java.time.LocalDateTime;
 
 @Entity
+@Table(name = "homepage_section")
 @Data
 public class HomepageSection {
     @Id
@@ -23,9 +27,10 @@ public class HomepageSection {
     private Integer displayOrder;
 
     private Boolean enabled;
-    @Column(columnDefinition = "TEXT")
-    private String config;
 
+    @JdbcTypeCode(SqlTypes.JSON)
+    @Column(columnDefinition = "json")
+    private JsonNode config;
 
     private LocalDateTime createdAt;
 

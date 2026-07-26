@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/homepage")
+@RequestMapping("/api/homepage/V1")
 @CrossOrigin
 public class HomepageController {
 

@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/admin/homepage")
+@RequestMapping("/admin/homepage")
 @CrossOrigin
 public class HomepageAdminController {
 

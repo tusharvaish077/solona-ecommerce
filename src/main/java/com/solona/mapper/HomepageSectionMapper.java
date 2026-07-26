@@ -1,8 +1,5 @@
 package com.solona.mapper;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.solona.dto.CreateHomepageSectionRequest;
 import com.solona.dto.HomepageSectionResponse;
 import com.solona.dto.UpdateHomepageSectionRequest;
@@ -14,12 +11,6 @@ import java.util.List;
 @Component
 public class HomepageSectionMapper {
 
-    private final ObjectMapper objectMapper;
-
-    public HomepageSectionMapper(ObjectMapper objectMapper) {
-        this.objectMapper = objectMapper;
-    }
-
     public HomepageSection toEntity(CreateHomepageSectionRequest request) {
 
         HomepageSection section = new HomepageSection();
@@ -28,12 +19,7 @@ public class HomepageSectionMapper {
         section.setTitle(request.getTitle());
         section.setDisplayOrder(request.getDisplayOrder());
         section.setEnabled(request.getEnabled());
-
-        try {
-            section.setConfig(objectMapper.writeValueAsString(request.getConfig()));
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException("Invalid JSON Config", e);
-        }
+        section.setConfig(request.getConfig());
 
         return section;
     }
@@ -45,12 +31,7 @@ public class HomepageSectionMapper {
         section.setTitle(request.getTitle());
         section.setDisplayOrder(request.getDisplayOrder());
         section.setEnabled(request.getEnabled());
-
-        try {
-            section.setConfig(objectMapper.writeValueAsString(request.getConfig()));
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException("Invalid JSON Config", e);
-        }
+        section.setConfig(request.getConfig());
     }
 
     public HomepageSectionResponse toResponse(HomepageSection section) {
@@ -62,13 +43,7 @@ public class HomepageSectionMapper {
         response.setTitle(section.getTitle());
         response.setDisplayOrder(section.getDisplayOrder());
         response.setEnabled(section.getEnabled());
-
-        try {
-            JsonNode jsonNode = objectMapper.readTree(section.getConfig());
-            response.setConfig(jsonNode);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException("Invalid JSON Config", e);
-        }
+        response.setConfig(section.getConfig());
 
         return response;
     }
