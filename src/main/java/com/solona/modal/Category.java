@@ -28,4 +28,7 @@ public class Category {
 
     @NotNull
     private Integer level;
+
+    @ManyToOne
+    private Brand brand;
 }

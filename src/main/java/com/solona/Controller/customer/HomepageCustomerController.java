@@ -2,6 +2,7 @@ package com.solona.Controller.customer;
 
 import com.solona.dto.HomepageSectionResponse;
 import com.solona.modal.HomepageSection;
+import com.solona.service.HomepageRenderService;
 import com.solona.service.HomepageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -16,13 +17,13 @@ import java.util.List;
 @RequiredArgsConstructor
 public class HomepageCustomerController {
 
-    private final HomepageService homepageService;
+    private final HomepageRenderService homepageRenderService;
 
     @GetMapping
     public ResponseEntity<List<HomepageSectionResponse>> getHomepage() {
 
         return ResponseEntity.ok(
-                homepageService.getEnabledSections()
+                homepageRenderService.buildHomepage()
         );
 
     }

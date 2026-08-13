@@ -18,4 +18,6 @@ public class CreateProductRequest {
 
     private String sizes;
 
+    private Long brandId;
+    private String brandName;
 }

@@ -2,6 +2,8 @@ package com.solona.repository;
 
 import com.solona.modal.Product;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
@@ -17,4 +19,14 @@ public interface ProductRepository extends JpaRepository<Product, Long>, JpaSpec
             "(:query IS NULL OR LOWER(p.title) LIKE LOWER(CONCAT('%', :query, '%')) " +
             "OR LOWER(p.category.name) LIKE LOWER(CONCAT('%', :query, '%')))")
     List<Product> searchProduct(@Param("query") String query);
+
+    Page<Product> findAll(Pageable pageable);
+
+    Page<Product> findByCategoryId(Long categoryId, Pageable pageable);
+
+    List<Product> findByIdIn(List<Long> ids);
+
+    Page<Product> findBySellerId(Long sellerId, Pageable pageable);
+
+    Page<Product> findByBrandId(Long brandId, Pageable pageable);
 }
