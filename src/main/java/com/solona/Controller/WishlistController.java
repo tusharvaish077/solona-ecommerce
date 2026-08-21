@@ -6,7 +6,9 @@ import com.solona.modal.Wishlist;
 import com.solona.service.ProductService;
 import com.solona.service.UserService;
 import com.solona.service.WishlistService;
+
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @RequestMapping("/wishlist")
 public class WishlistController {
+
     private final WishlistService wishlistService;
     private final UserService userService;
     private final ProductService productService;
@@ -22,19 +25,36 @@ public class WishlistController {
     @GetMapping
     public ResponseEntity<Wishlist> getWishlistByUserId(
             @RequestHeader("Authorization") String jwt
-    )throws Exception{
-        User user = userService.findUserByJwtToken(jwt);
-        Wishlist wishlist = wishlistService.getWishlistByUserId(user);
+    ) throws Exception {
+
+        User user =
+                userService.findUserByJwtToken(jwt);
+
+        Wishlist wishlist =
+                wishlistService.getWishlistByUserId(user);
+
         return ResponseEntity.ok(wishlist);
     }
+
+
     @PostMapping("/add-product/{productId}")
     public ResponseEntity<Wishlist> addProductToWishlist(
             @PathVariable Long productId,
             @RequestHeader("Authorization") String jwt
-    ) throws Exception{
-        Product product= productService.findProductById(productId);
-        User user = userService.findUserByJwtToken(jwt);
-         Wishlist updatedWishlist = wishlistService.addProductToWishlist(user, product);
+    ) throws Exception {
+
+        Product product =
+                productService.findProductEntityById(productId);
+
+        User user =
+                userService.findUserByJwtToken(jwt);
+
+        Wishlist updatedWishlist =
+                wishlistService.addProductToWishlist(
+                        user,
+                        product
+                );
+
         return ResponseEntity.ok(updatedWishlist);
     }
 }

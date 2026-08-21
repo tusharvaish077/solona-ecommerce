@@ -1,47 +1,64 @@
 package com.solona.mapper;
 
-import com.solona.dto.ProductDto;
+import com.solona.response.ProductResponse;
 import com.solona.modal.Product;
 import org.springframework.stereotype.Component;
 
 @Component
 public class ProductMapper {
 
-    public ProductDto toDto(Product product) {
+    public ProductResponse toResponse(Product product) {
 
-        ProductDto dto = new ProductDto();
+        ProductResponse response = new ProductResponse();
 
-        dto.setId(product.getId());
-        dto.setTitle(product.getTitle());
-        dto.setDescription(product.getDescription());
-        dto.setMrpPrice(product.getMrpPrice());
-        dto.setSellingPrice(product.getSellingPrice());
-        dto.setDiscountPercent(product.getDiscountPercent());
-        dto.setQuantity(product.getQuantity());
-        dto.setColor(product.getColor());
-        dto.setImages(product.getImages());
-        dto.setNumRatings(product.getNumRatings());
-        dto.setBrandId(
-                product.getBrand() != null
-                        ? product.getBrand().getId()
-                        : null
-        );
-        dto.setBrandName(
-                product.getBrand() != null
-                        ? product.getBrand().getName()
-                        : null
-        );
+        response.setId(product.getId());
+        response.setTitle(product.getTitle());
+        response.setDescription(product.getDescription());
 
+        response.setMrpPrice(product.getMrpPrice());
+        response.setSellingPrice(product.getSellingPrice());
+        response.setDiscountPercent(product.getDiscountPercent());
+
+        response.setQuantity(product.getQuantity());
+        response.setColor(product.getColor());
+        response.setImages(product.getImages());
+
+        response.setNumRatings(product.getNumRatings());
+        response.setCreatedAt(product.getCreatedAt());
+        response.setSizes(product.getSizes());
+
+        // Category
         if (product.getCategory() != null) {
-            dto.setCategoryId(product.getCategory().getId());
-            dto.setCategoryName(product.getCategory().getName());
+
+            response.setCategoryId(
+                    product.getCategory().getId()
+            );
+
+            response.setCategoryName(
+                    product.getCategory().getName()
+            );
         }
 
+        // Brand
+        if (product.getBrand() != null) {
+
+            response.setBrandId(
+                    product.getBrand().getId()
+            );
+
+            response.setBrandName(
+                    product.getBrand().getName()
+            );
+        }
+
+        // Seller
         if (product.getSeller() != null) {
-            dto.setSellerId(product.getSeller().getId());
-            dto.setSellerName(product.getSeller().getSellerName());
+
+            response.setSellerId(
+                    product.getSeller().getId()
+            );
         }
 
-        return dto;
+        return response;
     }
 }

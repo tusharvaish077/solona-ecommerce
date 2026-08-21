@@ -2,6 +2,7 @@ package com.solona.dto;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.solona.domain.SectionType;
+import com.solona.response.ProductResponse;
 import lombok.Data;
 
 import java.util.List;
@@ -21,5 +22,5 @@ public class HomepageSectionResponse {
 
     private JsonNode config;
 
-    private List<ProductDto> products;
+    private List<ProductResponse> products;
 }

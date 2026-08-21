@@ -1,7 +1,8 @@
 package com.solona.service;
 
-import com.solona.exception.ProductException;
 import com.solona.modal.Product;
+import com.solona.response.ProductResponse;
+import com.solona.exception.ProductException;
 import com.solona.modal.Seller;
 import com.solona.request.CreateProductRequest;
 import org.springframework.data.domain.Page;
@@ -9,12 +10,30 @@ import org.springframework.data.domain.Page;
 import java.util.List;
 
 public interface ProductService {
-    public Product createProduct(CreateProductRequest req, Seller seller);
-    public void deleteProduct(Long productId) throws ProductException;
-    public Product updateProduct(Long productId, Product product) throws ProductException;
-    public Product findProductById(Long productId) throws ProductException;
-    List<Product> searchProducts(String query);
-    public Page<Product> getAllProducts(
+
+    ProductResponse createProduct(
+            CreateProductRequest req,
+            Seller seller
+    );
+
+    void deleteProduct(
+            Long productId
+    ) throws ProductException;
+
+    ProductResponse updateProduct(
+            Long productId,
+            CreateProductRequest req
+    ) throws ProductException;
+
+    ProductResponse findProductById(
+            Long productId
+    ) throws ProductException;
+
+    List<ProductResponse> searchProducts(
+            String query
+    );
+
+    Page<ProductResponse> getAllProducts(
             String category,
             String brand,
             String color,
@@ -26,5 +45,9 @@ public interface ProductService {
             String stock,
             Integer pageNumber
     );
-    List<Product> getProductBySellerId(Long sellerId);
+
+    List<ProductResponse> getProductBySellerId(
+            Long sellerId
+    );
+    Product findProductEntityById(Long productId) throws ProductException;
 }

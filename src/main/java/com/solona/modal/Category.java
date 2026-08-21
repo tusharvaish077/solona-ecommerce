@@ -1,34 +1,31 @@
 package com.solona.modal;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 @Entity
+@Table(name = "categories")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode
+@Builder
 public class Category {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-
+    @Column(nullable = false)
     private String name;
 
-    @NotNull
-    @Column(unique = true)
-    private String categoryId; // this is changed from CategoryId to categoryId after facing issue on restart
+    private String image;
 
-    @ManyToOne
-    private Category perentCategory;
+    private Boolean enabled = true;
 
-    @NotNull
-    private Integer level;
+    private Integer displayOrder;
 
-    @ManyToOne
-    private Brand brand;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "parent_id")
+    private Category parent;
 }
